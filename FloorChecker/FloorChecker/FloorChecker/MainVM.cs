@@ -14,6 +14,9 @@ namespace FloorChecker
             Sensors = new ObservableCollection<Sensor>(DependencyService.Get<ISensor>().GetAvailableSensors());
         }
 
+        public double CoolHeight { get; set; }
+        public double Height { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string property)
         {

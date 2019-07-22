@@ -2,60 +2,34 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using Xamarin.Forms;
 
 namespace FloorChecker
 {
-    class
-        EnumTypeConverter : EnumConverter
+    public class EnumTypeConverter : IValueConverter
     {
-        private Type _enumType;
-        public EnumTypeConverter(Type type) : base(type)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            _enumType = type;
-        }
-
-        public override bool CanConvertTo(ITypeDescriptorContext context,
-          Type destType)
-        {
-            return destType == typeof(string);
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context,
-          CultureInfo culture,
-          object value, Type destType)
-        {
-            FieldInfo fi = _enumType.GetField(Enum.GetName(_enumType, value));
-            DescriptionAttribute dna =
-              (DescriptionAttribute)Attribute.GetCustomAttribute(
-                fi, typeof(DescriptionAttribute));
-
-            if (dna != null)
-                return dna.Description;
-            else
-                return value.ToString();
-        }
-
-        public override bool CanConvertFrom(ITypeDescriptorContext context,
-          Type srcType)
-        {
-            return srcType == typeof(string);
-        }
-
-        public override object ConvertFrom(ITypeDescriptorContext context,
-          CultureInfo culture,
-          object value)
-        {
-            foreach (FieldInfo fi in _enumType.GetFields())
+            switch ((Sensors.SensorTypes)value)
             {
-                DescriptionAttribute dna =
-                  (DescriptionAttribute)Attribute.GetCustomAttribute(
-                    fi, typeof(DescriptionAttribute));
-
-                if ((dna != null) && ((string)value == dna.Description))
-                    return Enum.Parse(_enumType, fi.Name);
+                case Sensors.SensorTypes.Accelerometr:
+                    return "Акселерометр";
+                case Sensors.SensorTypes.Gyro:
+                    return "Гироскоп";
+                case Sensors.SensorTypes.HeartBeat:
+                    return "Пульсометр";
+                case Sensors.SensorTypes.Pressure:
+                    return "Барометр";
+                case Sensors.SensorTypes.Temperature:
+                    return "Термометр";
+                default:
+                    return "Неизвестно";
             }
+        }
 
-            return Enum.Parse(_enumType, (string)value);
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (bool)value ? 1 : 0;
         }
     }
 }

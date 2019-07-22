@@ -7,12 +7,65 @@
     <ContentPage.BindingContext>
         <local:MainVM x:Name="conext" />
     </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <local:EnumTypeConverter x:Key="typeConverter" />
+    </ContentPage.Resources>
     <StackLayout>
-        <!--  Place new controls here  -->
-        <Label
-            HorizontalOptions="Center"
-            Text="Welcome to Xamarin.Forms!"
-            VerticalOptions="CenterAndExpand" />
+        <Label>
+            <Label.FormattedText>
+                <FormattedString>
+                    <FormattedString.Spans>
+                        <Span Text="Пройденая высота по-Артёмски : " />
+                        <Span Text="{Binding CoolHeight}" />
+                        <Span Text=" м." />
+                    </FormattedString.Spans>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label>
+            <Label.FormattedText>
+                <FormattedString>
+                    <FormattedString.Spans>
+                        <Span Text="Пройденая высота по-скучному : " />
+                        <Span Text="{Binding Height}" />
+                        <Span Text=" м." />
+                    </FormattedString.Spans>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <ListView
+            HasUnevenRows="True"
+            ItemsSource="{Binding Sensors}"
+            RowHeight="-1"
+            SeparatorColor="Black"
+            SeparatorVisibility="Default">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame>
+                            <StackLayout>
+                                <Label>
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <FormattedString.Spans>
+                                                <Span Text="{Binding Name}" />
+                                                <Span Text=" (v." />
+                                                <Span Text="{Binding Version}" />
+                                                <Span Text=")" />
+                                            </FormattedString.Spans>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label
+                                    FontSize="Small"
+                                    Text="{Binding Type, Converter={StaticResource typeConverter}}"
+                                    VerticalOptions="Start" />
+                            </StackLayout>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </StackLayout>
 
 </ContentPage>

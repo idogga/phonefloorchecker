@@ -18,7 +18,7 @@ namespace FloorChecker.Droid.Implement
             var sensors = sensorManager.GetSensorList(SensorType.All);
             foreach(var sensor in sensors)
             {
-                result.Add(new Sensor() { Name = sensor.Name, Version=sensor.Version });
+                result.Add(new Sensor() { Name = sensor.Name, Version=sensor.Version, Type = sensor.Type.GetSensorType() });
             }
             return result;
         }

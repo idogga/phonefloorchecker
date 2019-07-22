@@ -6,13 +6,13 @@ namespace FloorChecker.Droid.Implement
     {
         public static SensorTypes GetSensorType(this Android.Hardware.SensorType sensor)
         {
-            switch(sensor)
+            switch (sensor)
             {
                 case Android.Hardware.SensorType.Accelerometer:
                     return SensorTypes.Accelerometr;
                 case Android.Hardware.SensorType.Gyroscope:
                     return SensorTypes.Gyro;
-                    case Android.Hardware.SensorType.HeartBeat:
+                case Android.Hardware.SensorType.HeartBeat:
                     return SensorTypes.HeartBeat;
                 case Android.Hardware.SensorType.Pressure:
                     return SensorTypes.Pressure;
