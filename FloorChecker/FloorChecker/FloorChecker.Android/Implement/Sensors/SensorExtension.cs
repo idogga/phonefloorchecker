@@ -9,6 +9,8 @@ namespace FloorChecker.Droid.Implement
             switch (sensor)
             {
                 case Android.Hardware.SensorType.Accelerometer:
+                case Android.Hardware.SensorType.LinearAcceleration:
+                case Android.Hardware.SensorType.AccelerometerUncalibrated:
                     return SensorTypes.Accelerometr;
                 case Android.Hardware.SensorType.Gyroscope:
                     return SensorTypes.Gyro;

@@ -11,28 +11,35 @@
         <local:EnumTypeConverter x:Key="typeConverter" />
     </ContentPage.Resources>
     <StackLayout>
-        <Label>
-            <Label.FormattedText>
-                <FormattedString>
-                    <FormattedString.Spans>
-                        <Span Text="Пройденая высота по-Артёмски : " />
-                        <Span Text="{Binding CoolHeight}" />
-                        <Span Text=" м." />
-                    </FormattedString.Spans>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-        <Label>
-            <Label.FormattedText>
-                <FormattedString>
-                    <FormattedString.Spans>
-                        <Span Text="Пройденая высота по-скучному : " />
-                        <Span Text="{Binding Height}" />
-                        <Span Text=" м." />
-                    </FormattedString.Spans>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="Пройденая высота по-Артёмски : " />
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                FontAttributes="Bold"
+                Text="{Binding CoolHeight}" />
+
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="Пройденая высота по-скучному : " />
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                FontAttributes="Bold"
+                Text="{Binding Height}" />
+        </Grid>
         <ListView
             HasUnevenRows="True"
             ItemsSource="{Binding Sensors}"

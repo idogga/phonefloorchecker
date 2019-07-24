@@ -9,12 +9,7 @@ namespace FloorChecker.Sensors
 
         private double _lastHeightBySea = 0;
 
-        public BarometrCalculator(Action<double> getCurrentMeters)
-        {
-            getCurrentMeters += OnCurrentMeters;
-        }
-
-        private void OnCurrentMeters(double obj)
+        public void OnCurrentMeters(double obj)
         {
             if(_lastHeightBySea==0)
             {

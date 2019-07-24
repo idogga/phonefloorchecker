@@ -1,4 +1,5 @@
 ﻿using FloorChecker.Sensors;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -11,28 +12,46 @@ namespace FloorChecker
         public ObservableCollection<Sensor> Sensors { get; set; }
         private BarometrCalculator _barometr;
         IPressureSensor _pressure;
+        IAccelerometr _accelerometr;
+        private AccelerationCalculator _acceleration;
 
         public MainVM()
         {
             Sensors = new ObservableCollection<Sensor>(DependencyService.Get<ISensor>().GetAvailableSensors());
             _pressure = DependencyService.Get<IPressureSensor>();
             _pressure.GetCurrentMeters += CurrentHeight;
-            _barometr = new BarometrCalculator(_pressure.GetCurrentMeters);
+            _accelerometr = DependencyService.Get<IAccelerometr>();
+            _accelerometr.GetCurrentAcceleration += AccelerationChanged;
+            _barometr = new BarometrCalculator();
             _barometr.HeightChanged += BarometrChanged;
+            _acceleration = new AccelerationCalculator();
+            _acceleration.HeightChanged += HeightChanged;
+
+        }
+
+        private void HeightChanged()
+        {
+            Debug.WriteLine($"{DateTime.Now.Ticks}\tизмение крутой высоты {CoolHeight}");
+            Device.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(CoolHeight)));
+        }
+
+        private void AccelerationChanged(double x, double y, double z)
+        {
+            _acceleration.OnCurrentMeters(x, y, z);
         }
 
         public void BarometrChanged()
         {
             Debug.WriteLine($"измение высоты {Height}");
-            OnPropertyChanged(nameof(Height));
+            Device.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(Height)));
         }
 
         private void CurrentHeight(double obj)
         {
-            Debug.WriteLine($"Текущая высота пользователя = {obj}");
+            _barometr.OnCurrentMeters(obj);
         }
 
-        public double CoolHeight { get; set; }
+        public double CoolHeight { get=>_acceleration.Height; set { } }
         public double Height { get => _barometr.Height; set { } }
 
         public event PropertyChangedEventHandler PropertyChanged;

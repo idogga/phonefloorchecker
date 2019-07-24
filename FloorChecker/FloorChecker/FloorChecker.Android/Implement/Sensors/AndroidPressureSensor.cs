@@ -26,11 +26,11 @@ namespace FloorChecker.Droid.Sensors
             Start();
             if (pressureSensor != null)
             {
-                bool res = sensorManager.RegisterListener(new PressureSensorEventListener(OnBarometrChecked), pressureSensor, SensorDelay.Fastest);
+                bool res = sensorManager.RegisterListener(new PressureSensorEventListener(OnBarometrChecked), pressureSensor, SensorDelay.Normal);
             }
             if(temperatureSensor!=null)
             {
-                bool res = sensorManager.RegisterListener(new PressureSensorEventListener(OnTemperatureChecked), temperatureSensor, SensorDelay.Fastest);
+                bool res = sensorManager.RegisterListener(new PressureSensorEventListener(OnTemperatureChecked), temperatureSensor, SensorDelay.Normal);
             }
         }
 
