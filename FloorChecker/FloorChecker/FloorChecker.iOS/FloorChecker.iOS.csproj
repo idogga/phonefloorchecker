@@ -95,8 +95,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DeviceHardware.cs" />
-    <Compile Include="Implement\IOSAccelerametr.cs" />
-    <Compile Include="Implement\IOSPressure.cs" />
     <Compile Include="Implement\IOSSensors.cs" />
     <Compile Include="iOSHardware.cs" />
     <Compile Include="Main.cs" />

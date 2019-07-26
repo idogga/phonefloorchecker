@@ -12,23 +12,103 @@ namespace FloorChecker
     {
         public ObservableCollection<Sensor> Sensors { get; set; }
         private BarometrCalculator _barometr;
-        IPressureSensor _pressure;
-        IAccelerometr _accelerometr;
         private AccelerationCalculator _acceleration;
-
+        private GeoCalculator _geo;
         public MainVM()
         {
             Sensors = new ObservableCollection<Sensor>(DependencyService.Get<ISensor>().GetAvailableSensors());
-            _pressure = DependencyService.Get<IPressureSensor>();
             Barometer.ReadingChanged += Barometer_ReadingChanged;
-            _pressure.GetCurrentMeters += CurrentHeight;
-            _accelerometr = DependencyService.Get<IAccelerometr>();
-            _accelerometr.GetCurrentAcceleration += AccelerationChanged;
             _barometr = new BarometrCalculator();
+            _geo = new GeoCalculator();
             _barometr.HeightChanged += BarometrChanged;
+            _geo.HeightChanged += GeoChanged;
             _acceleration = new AccelerationCalculator();
             _acceleration.HeightChanged += HeightChanged;
-            Barometer.Start(SensorSpeed.Fastest);
+            OrientationSensor.ReadingChanged += OrientationChanged;
+            Accelerometer.ReadingChanged += AccelerometerChanged;
+            try
+            {
+                Accelerometer.Start(SensorSpeed.UI);
+            }
+            catch(Exception e)
+            {
+                var settings = new SpeechOptions()
+                {
+                    Volume = .75f,
+                    Pitch = 1.0f
+                };
+
+                TextToSpeech.SpeakAsync(e.Message, settings);
+            }
+            try
+            {
+                Barometer.Start(SensorSpeed.Default);
+            }
+            catch (Exception e)
+            {
+                var settings = new SpeechOptions()
+                {
+                    Volume = .75f,
+                    Pitch = 1.0f
+                };
+
+                TextToSpeech.SpeakAsync(e.Message, settings);
+            }
+            try
+            {
+                OrientationSensor.Start(SensorSpeed.Fastest);
+            }
+            catch (Exception e)
+            {
+                var settings = new SpeechOptions()
+                {
+                    Volume = .75f,
+                    Pitch = 1.0f
+                };
+
+                TextToSpeech.SpeakAsync(e.Message, settings);
+            }
+            Device.StartTimer(TimeSpan.FromMilliseconds(300), () => { UpdateLocation(); return true; });
+            
+        }
+
+        private void GeoChanged()
+        {
+            Debug.WriteLine($"измение высоты {AltitudeHeight}");
+            Device.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(AltitudeHeight)));
+        }
+
+        private async void UpdateLocation()
+        {
+            try
+            {
+                var request = new GeolocationRequest(GeolocationAccuracy.Medium);
+                var location = await Geolocation.GetLocationAsync(request);
+
+                if (location != null)
+                {
+                    _geo.Calculate(location.Altitude);
+                }
+            }
+            catch (Exception e)
+            {
+                var settings = new SpeechOptions()
+                {
+                    Volume = .75f,
+                    Pitch = 1.0f
+                };
+                await TextToSpeech.SpeakAsync(e.Message, settings);
+            }
+        }
+
+        private void OrientationChanged(object sender, OrientationSensorChangedEventArgs e)
+        {
+            _acceleration.OrientationChanged(e.Reading.Orientation);
+        }
+
+        private void AccelerometerChanged(object sender, AccelerometerChangedEventArgs e)
+        {
+            _acceleration.OnCurrentMeters(e.Reading.Acceleration.X, e.Reading.Acceleration.Y, e.Reading.Acceleration.Z);
         }
 
         private void Barometer_ReadingChanged(object sender, BarometerChangedEventArgs e)
@@ -38,13 +118,7 @@ namespace FloorChecker
 
         private void HeightChanged()
         {
-            Debug.WriteLine($"{DateTime.Now.Ticks}\tизмение крутой высоты {CoolHeight}");
             Device.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(CoolHeight)));
-        }
-
-        private void AccelerationChanged(double x, double y, double z)
-        {
-            _acceleration.OnCurrentMeters(x, y, z);
         }
 
         public void BarometrChanged()
@@ -53,13 +127,9 @@ namespace FloorChecker
             Device.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(Height)));
         }
 
-        private void CurrentHeight(double obj)
-        {
-            _barometr.OnCurrentMeters(obj);
-        }
-
-        public double CoolHeight { get=>_acceleration.Height; set { } }
-        public double Height { get => _barometr.Height; set { } }
+        public string CoolHeight { get=>_acceleration.Height.ToString("0.##"); set { } }
+        public string Height { get => _barometr.Height.ToString("0.##"); set { } }
+        public string AltitudeHeight { get => _geo.Height.ToString("0.##"); set { } }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string property)

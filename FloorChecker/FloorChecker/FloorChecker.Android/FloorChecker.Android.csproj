@@ -60,8 +60,6 @@
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="27.0.2.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implement\Sensors\AndroidAccelerationSensor.cs" />
-    <Compile Include="Implement\Sensors\AndroidPressureSensor.cs" />
     <Compile Include="Implement\Sensors\AndroidSensors.cs" />
     <Compile Include="Implement\Sensors\HeightCalculator.cs" />
     <Compile Include="Implement\Sensors\PressureSensorEventListener.cs" />

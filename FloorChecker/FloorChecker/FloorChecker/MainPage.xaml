@@ -9,6 +9,13 @@
     </ContentPage.BindingContext>
     <ContentPage.Resources>
         <local:EnumTypeConverter x:Key="typeConverter" />
+        <Style x:Key="gridLbl" TargetType="Label">
+            <Setter Property="FontSize" Value="Default" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            <Setter Property="HorizontalTextAlignment" Value="Start" />
+            <Setter Property="VerticalOptions" Value="FillAndExpand" />
+            <Setter Property="VerticalTextAlignment" Value="Center" />
+        </Style>
     </ContentPage.Resources>
     <StackLayout>
         <Grid>
@@ -23,22 +30,37 @@
             <Label
                 Grid.Row="0"
                 Grid.Column="0"
-                Text="Пройденая высота по-Артёмски : " />
+                Style="{StaticResource gridLbl}"
+                Text="Этажи по-Артёму : " />
             <Label
                 Grid.Row="0"
                 Grid.Column="1"
                 FontAttributes="Bold"
+                Style="{StaticResource gridLbl}"
                 Text="{Binding CoolHeight}" />
 
             <Label
                 Grid.Row="1"
                 Grid.Column="0"
-                Text="Пройденая высота по-скучному : " />
+                Style="{StaticResource gridLbl}"
+                Text="Этажи по-скучному : " />
             <Label
                 Grid.Row="1"
                 Grid.Column="1"
                 FontAttributes="Bold"
+                Style="{StaticResource gridLbl}"
                 Text="{Binding Height}" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                Style="{StaticResource gridLbl}"
+                Text="Этажи по-ГПС : " />
+            <Label
+                Grid.Row="2"
+                Grid.Column="1"
+                FontAttributes="Bold"
+                Style="{StaticResource gridLbl}"
+                Text="{Binding AltitudeHeight}" />
         </Grid>
         <ListView
             HasUnevenRows="True"
