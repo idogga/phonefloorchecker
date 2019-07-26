@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FloorChecker
@@ -19,6 +20,7 @@ namespace FloorChecker
         {
             Sensors = new ObservableCollection<Sensor>(DependencyService.Get<ISensor>().GetAvailableSensors());
             _pressure = DependencyService.Get<IPressureSensor>();
+            Barometer.ReadingChanged += Barometer_ReadingChanged;
             _pressure.GetCurrentMeters += CurrentHeight;
             _accelerometr = DependencyService.Get<IAccelerometr>();
             _accelerometr.GetCurrentAcceleration += AccelerationChanged;
@@ -26,7 +28,12 @@ namespace FloorChecker
             _barometr.HeightChanged += BarometrChanged;
             _acceleration = new AccelerationCalculator();
             _acceleration.HeightChanged += HeightChanged;
+            Barometer.Start(SensorSpeed.Fastest);
+        }
 
+        private void Barometer_ReadingChanged(object sender, BarometerChangedEventArgs e)
+        {
+            _barometr.OnCurrentMeters(new HeightCalculator(27, e.Reading.PressureInHectopascals).Height);
         }
 
         private void HeightChanged()

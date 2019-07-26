@@ -16,7 +16,7 @@ namespace FloorChecker.Sensors
                 _lastHeightBySea = obj;
                 return;
             }
-            if(_lastHeightBySea -obj < 0.5)
+            if(Math.Abs(_lastHeightBySea - obj) > 0.5)
             {
                 _lastHeightBySea = obj;
                 Height = Math.Abs(_lastHeightBySea - obj);
