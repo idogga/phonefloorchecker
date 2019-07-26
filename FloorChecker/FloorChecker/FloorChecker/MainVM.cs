@@ -11,6 +11,8 @@ namespace FloorChecker
     public class MainVM : INotifyPropertyChanged
     {
         public ObservableCollection<Sensor> Sensors { get; set; }
+
+        private const int _metersPerFloor = 2;
         private BarometrCalculator _barometr;
         private AccelerationCalculator _acceleration;
         private GeoCalculator _geo;
@@ -30,7 +32,7 @@ namespace FloorChecker
             {
                 Accelerometer.Start(SensorSpeed.UI);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 var settings = new SpeechOptions()
                 {
@@ -69,7 +71,7 @@ namespace FloorChecker
                 TextToSpeech.SpeakAsync(e.Message, settings);
             }
             Device.StartTimer(TimeSpan.FromMilliseconds(300), () => { UpdateLocation(); return true; });
-            
+
         }
 
         private void GeoChanged()
@@ -127,9 +129,9 @@ namespace FloorChecker
             Device.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(Height)));
         }
 
-        public string CoolHeight { get=>_acceleration.Height.ToString("0.##"); set { } }
-        public string Height { get => _barometr.Height.ToString("0.##"); set { } }
-        public string AltitudeHeight { get => _geo.Height.ToString("0.##"); set { } }
+        public string CoolHeight { get => (_acceleration.Height / _metersPerFloor).ToString("0.##"); set { } }
+        public string Height { get => (_barometr.Height / _metersPerFloor).ToString("0.##"); set { } }
+        public string AltitudeHeight { get => (_geo.Height / _metersPerFloor).ToString("0.##"); set { } }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string property)
