@@ -4,25 +4,18 @@ namespace FloorChecker
 {
     class HeightCalculator
     {
-        private double currentTemperature;
-        private double obj;
-        private const double g = 9.81;
-        private const double n = 0.029;
-        private const double R = 8.31;
-        private const double Po = 760;
-        private const double To = 273;
+        private double _pressure;
 
-        public HeightCalculator(double currentTemperature, double pressure)
+        public HeightCalculator(double pressure)
         {
-            this.currentTemperature = currentTemperature;
-            this.obj = pressure;
+            _pressure = pressure;
         }
 
         public double Height
         {
             get
             {
-                return ((Math.Pow(1013.25 / obj, 1 / 5.257) - 1) * (currentTemperature + 273.15)) / 0.0065;
+                return (_pressure * 7.500637554192 - 7600) * 1.2;
             }
         }
     }

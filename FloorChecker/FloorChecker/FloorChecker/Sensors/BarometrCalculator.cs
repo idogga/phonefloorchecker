@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FloorChecker.Sensors
+namespace FloorChecker
 {
     class BarometrCalculator
     {
@@ -8,6 +8,7 @@ namespace FloorChecker.Sensors
         public double Height { get; private set; }
 
         private double _lastHeightBySea = 0;
+        private AvarageNumberCalculator _stack = new AvarageNumberCalculator();
 
         public void OnCurrentMeters(double obj)
         {
@@ -16,9 +17,10 @@ namespace FloorChecker.Sensors
                 _lastHeightBySea = obj;
                 return;
             }
-            if(Math.Abs(_lastHeightBySea - obj) > 0.5)
+            _stack.Add(obj);
+            if (Math.Abs(_lastHeightBySea - _stack.Avg) > 1)
             {
-                Height = Math.Abs(_lastHeightBySea - obj);
+                Height += Math.Abs(_lastHeightBySea - obj);
                 HeightChanged?.Invoke();
                 _lastHeightBySea = obj;
             }

@@ -34,13 +34,7 @@ namespace FloorChecker
             }
             catch (Exception e)
             {
-                var settings = new SpeechOptions()
-                {
-                    Volume = .75f,
-                    Pitch = 1.0f
-                };
-
-                TextToSpeech.SpeakAsync(e.Message, settings);
+                SpeakException(e);
             }
             try
             {
@@ -48,13 +42,7 @@ namespace FloorChecker
             }
             catch (Exception e)
             {
-                var settings = new SpeechOptions()
-                {
-                    Volume = .75f,
-                    Pitch = 1.0f
-                };
-
-                TextToSpeech.SpeakAsync(e.Message, settings);
+                SpeakException(e);
             }
             try
             {
@@ -62,16 +50,21 @@ namespace FloorChecker
             }
             catch (Exception e)
             {
-                var settings = new SpeechOptions()
-                {
-                    Volume = .75f,
-                    Pitch = 1.0f
-                };
-
-                TextToSpeech.SpeakAsync(e.Message, settings);
+                SpeakException(e);
             }
             Device.StartTimer(TimeSpan.FromMilliseconds(300), () => { UpdateLocation(); return true; });
 
+        }
+
+        private void SpeakException(Exception e)
+        {
+            var settings = new SpeechOptions()
+            {
+                Volume = .75f,
+                Pitch = 1.0f
+            };
+
+            TextToSpeech.SpeakAsync(e.Message, settings);
         }
 
         private void GeoChanged()
@@ -94,12 +87,7 @@ namespace FloorChecker
             }
             catch (Exception e)
             {
-                var settings = new SpeechOptions()
-                {
-                    Volume = .75f,
-                    Pitch = 1.0f
-                };
-                await TextToSpeech.SpeakAsync(e.Message, settings);
+                SpeakException(e);
             }
         }
 
@@ -115,7 +103,7 @@ namespace FloorChecker
 
         private void Barometer_ReadingChanged(object sender, BarometerChangedEventArgs e)
         {
-            _barometr.OnCurrentMeters(new HeightCalculator(27, e.Reading.PressureInHectopascals).Height);
+            _barometr.OnCurrentMeters(new HeightCalculator(e.Reading.PressureInHectopascals).Height);
         }
 
         private void HeightChanged()
