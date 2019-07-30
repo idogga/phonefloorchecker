@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FloorChecker.Sensors.SensorList.SensorsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:FloorChecker">
+    <ContentPage.Resources>
+        <local:EnumTypeConverter x:Key="typeConverter" />
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <local:SensorsVM x:Name="conext" />
+    </ContentPage.BindingContext>
+    <ListView
+        HasUnevenRows="True"
+        ItemsSource="{Binding Sensors}"
+        RowHeight="-1"
+        SeparatorColor="Black"
+        SeparatorVisibility="Default">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Frame>
+                        <StackLayout>
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <FormattedString.Spans>
+                                            <Span FontAttributes="Bold" Text="{Binding Name}" />
+                                            <Span FontSize="Small" Text=" (v." />
+                                            <Span
+                                                FontAttributes="Italic"
+                                                FontSize="Small"
+                                                Text="{Binding Version}" />
+                                            <Span FontSize="Small" Text=")" />
+                                        </FormattedString.Spans>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label
+                                FontSize="Small"
+                                Text="{Binding Type, Converter={StaticResource typeConverter}}"
+                                VerticalOptions="Start" />
+                        </StackLayout>
+                    </Frame>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>

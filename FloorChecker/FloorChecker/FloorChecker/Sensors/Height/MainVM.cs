@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -10,15 +11,17 @@ namespace FloorChecker
 {
     public class MainVM : INotifyPropertyChanged
     {
-        public ObservableCollection<Sensor> Sensors { get; set; }
 
         private const int _metersPerFloor = 2;
         private BarometrCalculator _barometr;
         private AccelerationCalculator _acceleration;
         private GeoCalculator _geo;
+
+        public ICommand SeeDevices { get; }
+
+
         public MainVM()
         {
-            Sensors = new ObservableCollection<Sensor>(DependencyService.Get<ISensor>().GetAvailableSensors());
             Barometer.ReadingChanged += Barometer_ReadingChanged;
             _barometr = new BarometrCalculator();
             _geo = new GeoCalculator();
@@ -53,7 +56,7 @@ namespace FloorChecker
                 SpeakException(e);
             }
             Device.StartTimer(TimeSpan.FromMilliseconds(300), () => { UpdateLocation(); return true; });
-
+            SeeDevices = new Command(() => App.Current.MainPage.Navigation.PushAsync(new Sensors.SensorList.SensorsPage()));
         }
 
         private void SpeakException(Exception e)

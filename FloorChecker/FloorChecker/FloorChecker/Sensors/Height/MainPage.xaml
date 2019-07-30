@@ -8,7 +8,6 @@
         <local:MainVM x:Name="conext" />
     </ContentPage.BindingContext>
     <ContentPage.Resources>
-        <local:EnumTypeConverter x:Key="typeConverter" />
         <Style x:Key="gridLbl" TargetType="Label">
             <Setter Property="FontSize" Value="Default" />
             <Setter Property="HorizontalOptions" Value="FillAndExpand" />
@@ -18,90 +17,53 @@
             <Setter Property="LineBreakMode" Value="TailTruncation" />
         </Style>
     </ContentPage.Resources>
-    <StackLayout>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="AUTO" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="AUTO" />
-                <RowDefinition Height="AUTO" />
-            </Grid.RowDefinitions>
-            <Label
-                Grid.Row="0"
-                Grid.Column="0"
-                Style="{StaticResource gridLbl}"
-                Text="Этажи по-Артёму : " />
-            <Label
-                Grid.Row="0"
-                Grid.Column="1"
-                FontAttributes="Bold"
-                Style="{StaticResource gridLbl}"
-                Text="{Binding CoolHeight}"
-                VerticalOptions="EndAndExpand" />
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="AUTO" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="AUTO" />
+            <RowDefinition Height="AUTO" />
+        </Grid.RowDefinitions>
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            Style="{StaticResource gridLbl}"
+            Text="Этажи по-Артёму : " />
+        <Label
+            Grid.Row="0"
+            Grid.Column="1"
+            FontAttributes="Bold"
+            Style="{StaticResource gridLbl}"
+            Text="{Binding CoolHeight}"
+            VerticalOptions="EndAndExpand" />
 
-            <Label
-                Grid.Row="1"
-                Grid.Column="0"
-                Style="{StaticResource gridLbl}"
-                Text="Этажи по-скучному : " />
-            <Label
-                Grid.Row="1"
-                Grid.Column="1"
-                FontAttributes="Bold"
-                Style="{StaticResource gridLbl}"
-                Text="{Binding Height}"
-                VerticalOptions="EndAndExpand" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="0"
-                Style="{StaticResource gridLbl}"
-                Text="Этажи по-ГПС : " />
-            <Label
-                Grid.Row="2"
-                Grid.Column="1"
-                FontAttributes="Bold"
-                Style="{StaticResource gridLbl}"
-                Text="{Binding AltitudeHeight}"
-                VerticalOptions="EndAndExpand" />
-        </Grid>
-        <ListView
-            HasUnevenRows="True"
-            ItemsSource="{Binding Sensors}"
-            RowHeight="-1"
-            SeparatorColor="Black"
-            SeparatorVisibility="Default">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Frame>
-                            <StackLayout>
-                                <Label>
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <FormattedString.Spans>
-                                                <Span FontAttributes="Bold" Text="{Binding Name}" />
-                                                <Span FontSize="Small" Text=" (v." />
-                                                <Span
-                                                    FontAttributes="Italic"
-                                                    FontSize="Small"
-                                                    Text="{Binding Version}" />
-                                                <Span FontSize="Small" Text=")" />
-                                            </FormattedString.Spans>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                                <Label
-                                    FontSize="Small"
-                                    Text="{Binding Type, Converter={StaticResource typeConverter}}"
-                                    VerticalOptions="Start" />
-                            </StackLayout>
-                        </Frame>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </StackLayout>
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            Style="{StaticResource gridLbl}"
+            Text="Этажи по-скучному : " />
+        <Label
+            Grid.Row="1"
+            Grid.Column="1"
+            FontAttributes="Bold"
+            Style="{StaticResource gridLbl}"
+            Text="{Binding Height}"
+            VerticalOptions="EndAndExpand" />
+        <Label
+            Grid.Row="2"
+            Grid.Column="0"
+            Style="{StaticResource gridLbl}"
+            Text="Этажи по-ГПС : " />
+        <Label
+            Grid.Row="2"
+            Grid.Column="1"
+            FontAttributes="Bold"
+            Style="{StaticResource gridLbl}"
+            Text="{Binding AltitudeHeight}"
+            VerticalOptions="EndAndExpand" />
+        <Button Command="{Binding SeeDevices}" Text="11111" />
+    </Grid>
 
 </ContentPage>
